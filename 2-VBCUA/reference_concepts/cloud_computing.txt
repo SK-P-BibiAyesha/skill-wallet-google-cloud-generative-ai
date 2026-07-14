@@ -1,0 +1,1 @@
+Cloud Computing is the delivery of computing services such as servers, storage, databases, networking, software, and analytics over the Internet. It provides scalability, flexibility, and cost efficiency. Popular cloud service models include IaaS, PaaS, and SaaS.

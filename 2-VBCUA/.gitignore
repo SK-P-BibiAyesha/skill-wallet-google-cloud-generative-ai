@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Environment Variables
+.env
+
+# Database
+*.db-journal
+*.sqlite3
+
+# Audio uploads
+audio/uploads/*
+!audio/uploads/.gitkeep
+
+audio/processed/*
+!audio/processed/.gitkeep
+
+audio/waveforms/*
+!audio/waveforms/.gitkeep
+
+# Generated reports
+reports/*
+!reports/.gitkeep
+
+# Logs
+*.log

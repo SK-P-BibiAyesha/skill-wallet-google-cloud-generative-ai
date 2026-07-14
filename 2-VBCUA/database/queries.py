@@ -1,0 +1,69 @@
+from database.database import get_connection
+
+
+def insert_analysis(
+    topic,
+    transcript,
+    similarity,
+    overall,
+    concept,
+    quality,
+    level,
+    feedback,
+):
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    INSERT INTO analysis_history(
+        topic,
+        transcript,
+        similarity,
+        overall_score,
+        concept_accuracy,
+        explanation_quality,
+        level,
+        feedback
+    )
+
+    VALUES(?,?,?,?,?,?,?,?)
+
+    """, (
+        topic,
+        transcript,
+        similarity,
+        overall,
+        concept,
+        quality,
+        level,
+        feedback
+    ))
+
+    conn.commit()
+
+    conn.close()
+
+
+def get_all_reports():
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+
+    SELECT *
+
+    FROM analysis_history
+
+    ORDER BY created_at DESC
+
+    """)
+
+    rows = cursor.fetchall()
+
+    conn.close()
+
+    return rows

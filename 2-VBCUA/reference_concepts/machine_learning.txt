@@ -1,0 +1,1 @@
+Machine Learning is a branch of Artificial Intelligence that enables computers to learn from data without being explicitly programmed. It uses algorithms to identify patterns, make predictions, and improve performance over time. Common applications include recommendation systems, spam detection, image recognition, fraud detection, and speech recognition.

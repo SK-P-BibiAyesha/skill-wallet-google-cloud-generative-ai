@@ -1,0 +1,7 @@
+A Database Management System (DBMS) is software that enables users to create, store, organize, retrieve, update, and manage data efficiently. It acts as an interface between users and databases, ensuring secure and reliable data management.
+
+A DBMS provides features such as data storage, data retrieval, data security, backup and recovery, concurrency control, and data integrity. It reduces data redundancy and ensures consistency by organizing information into tables consisting of rows and columns.
+
+Common database operations include Create, Read, Update, and Delete (CRUD). SQL (Structured Query Language) is the standard language used to interact with relational databases. Popular DBMS software includes MySQL, PostgreSQL, Oracle Database, Microsoft SQL Server, and SQLite.
+
+Database Management Systems are widely used in banking, education, healthcare, e-commerce, and business applications where efficient data management and reliable storage are essential.
