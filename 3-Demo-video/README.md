@@ -1,5 +1,19 @@
-# Demo Video
+# Project Demo Video
 
-Project Demo Video:
+## Voice-Based Concept Understanding Analyser (VBCUA)
 
-"C:\Users\shaik\Videos\Screen Recordings\Screen Recording 2026-07-12 113542.mp4"
+### Demo Video
+
+Google Drive Link:
+
+https://drive.google.com/file/d/xxxxxxxxxxxxxxxx/view?usp=sharing
+
+This video demonstrates:
+
+- Project Overview
+- Home Page
+- Audio Upload
+- Speech-to-Text
+- Semantic Analysis
+- Dashboard
+- PDF Report Generation
