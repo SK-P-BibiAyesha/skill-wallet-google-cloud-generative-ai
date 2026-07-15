@@ -6,8 +6,7 @@
 
 Google Drive Link:
 
-https://drive.google.com/file/d/xxxxxxxxxxxxxxxx/view?usp=sharing
-
+https://drive.google.com/file/d/1kGUYjpRl-NZ_080qFYpB526kMqMYTFNF/view?usp=drive_link
 This video demonstrates:
 
 - Project Overview
