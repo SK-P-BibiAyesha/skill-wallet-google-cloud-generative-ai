@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 import pandas as pd
@@ -204,6 +205,18 @@ for _, row in filtered_df.iterrows():
 
         st.write("### 💬 Feedback")
         st.write(row["Feedback"])
+
+        pdf_path = f"reports/{row['Topic']}_Analysis_Report.pdf"
+        if os.path.exists(pdf_path):
+            with open(pdf_path, "rb") as pdf_file:
+                st.download_button(
+                    label=f"📥 Download {row['Topic']} PDF Report",
+                    data=pdf_file.read(),
+                    file_name=f"{row['Topic']}_Analysis_Report.pdf",
+                    mime="application/pdf",
+                    key=f"download-pdf-{row['ID']}",
+                    width="stretch",
+                )
 
 st.divider()
 

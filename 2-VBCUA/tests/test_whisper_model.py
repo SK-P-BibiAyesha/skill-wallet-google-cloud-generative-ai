@@ -12,9 +12,11 @@ def test_whisper_model():
     Test Faster Whisper transcription.
     """
 
-    audio_path = "tests/sample_audio.ogg"
+    audio_path = Path(__file__).resolve().parent / "cloud.ogg"
+    if not audio_path.exists():
+        audio_path = Path(__file__).resolve().parent / "sample_audio.ogg"
 
-    transcript = transcribe_audio(audio_path)
+    transcript = transcribe_audio(str(audio_path))
 
     print("\nTranscript:")
     print(transcript)

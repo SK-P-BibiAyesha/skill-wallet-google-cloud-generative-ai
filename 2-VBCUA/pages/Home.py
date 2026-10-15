@@ -58,20 +58,18 @@ features = [
     ("📄", "PDF Reports",
      "Generate downloadable PDF reports containing scores, feedback, transcript, and analysis results."),
 ]
-for i in range(0, len(features), 2):
-    columns = st.columns(2)
-    for col, (icon, title, description) in zip(columns, features[i:i + 2]):
-        with col:
-            st.markdown(
-                f"""
-                <div class="feature-card">
-                    <div class="feature-icon">{icon}</div>
-                    <h3 class="feature-title">{title}</h3>
-                    <p class="feature-description">{description}</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+
+features_html = "".join(
+    f"""
+    <div class="feature-card">
+        <div class="feature-icon">{icon}</div>
+        <h3 class="feature-title">{title}</h3>
+        <p class="feature-description">{desc}</p>
+    </div>
+    """
+    for icon, title, desc in features
+)
+st.markdown(f'<div class="vbcua-grid vbcua-grid-4">{features_html}</div>', unsafe_allow_html=True)
 
 st.divider()
 
@@ -80,29 +78,27 @@ st.divider()
 # -------------------------------------------------------------------
 st.header("⚙️ How It Works")
 workflow = [
-    ("1️⃣", "Upload Audio",
+    ("01", "Upload Audio",
      "Upload your recorded voice explanation to begin the AI-powered analysis."),
-    ("2️⃣", "Speech Recognition",
+    ("02", "Speech Recognition",
      "Faster Whisper converts the uploaded speech into accurate text."),
-    ("3️⃣", "AI Analysis",
+    ("03", "AI Analysis",
      "Sentence-BERT compares the explanation with the reference concept and evaluates understanding."),
-    ("4️⃣", "Results & Report",
+    ("04", "Results & Report",
      "View scores, feedback, keyword matching and download the professional PDF report."),
 ]
-for i in range(0, len(workflow), 2):
-    columns = st.columns(2)
-    for col, (number, title, description) in zip(columns, workflow[i:i + 2]):
-        with col:
-            st.markdown(
-                f"""
-                <div class="workflow-card">
-                    <div class="workflow-number">{number}</div>
-                    <h4>{title}</h4>
-                    <p>{description}</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+
+workflow_html = "".join(
+    f"""
+    <div class="how-card">
+        <div class="how-number">{number}</div>
+        <h4 class="how-title">{title}</h4>
+        <p class="how-description">{desc}</p>
+    </div>
+    """
+    for number, title, desc in workflow
+)
+st.markdown(f'<div class="vbcua-grid vbcua-grid-4">{workflow_html}</div>', unsafe_allow_html=True)
 
 st.divider()
 
@@ -111,25 +107,26 @@ st.divider()
 # -------------------------------------------------------------------
 st.header("🛠 Technologies Used")
 technologies = [
-    ("🐍", "Programming", "✔ Python<br>✔ Streamlit<br>✔ SQLite"),
-    ("🤖", "Artificial Intelligence",
-     "✔ Faster Whisper<br>✔ Sentence-BERT<br>✔ Transformers"),
-    ("📚", "Libraries",
-     "✔ Torch<br>✔ Librosa<br>✔ Plotly<br>✔ ReportLab<br>✔ Pandas"),
+    ("🐍", "Application", ["Python", "Streamlit"]),
+    ("🤖", "AI Models", ["Faster Whisper", "Sentence-BERT", "Transformers"]),
+    ("📚", "Supporting Libraries", ["SQLite", "ReportLab", "Librosa", "Plotly", "Pandas"]),
 ]
-columns = st.columns(3)
-for col, (icon, title, items) in zip(columns, technologies):
-    with col:
-        st.markdown(
-            f"""
-            <div class="tech-card">
-                <div class="tech-icon">{icon}</div>
-                <h3>{title}</h3>
-                <p>{items}</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+
+tech_html = "".join(
+    f"""
+    <div class="tech-card">
+        <div class="tech-header">
+            <span class="tech-icon">{icon}</span>
+            <h3 class="tech-title">{title}</h3>
+        </div>
+        <div class="tech-list">
+            {"".join(f'<span class="tech-pill">{item}</span>' for item in items)}
+        </div>
+    </div>
+    """
+    for icon, title, items in technologies
+)
+st.markdown(f'<div class="vbcua-grid vbcua-grid-3">{tech_html}</div>', unsafe_allow_html=True)
 
 st.divider()
 
@@ -138,30 +135,35 @@ st.divider()
 # -------------------------------------------------------------------
 st.header("📈 Project Highlights")
 highlights = [
-    ("🤖", "AI Models", "2", "Faster Whisper<br>Sentence-BERT"),
-    ("📚", "Topics", "6",
-     "Machine Learning<br>Cloud Computing<br>Artificial Intelligence<br>"
-     "Data Science<br>DBMS<br>Operating System"),
-    ("📄", "Reports", "PDF",
-     "Transcript<br>Scores<br>AI Feedback<br>Keyword Analysis"),
-    ("💾", "Database", "SQLite",
-     "Stores analysis history<br>Tracks reports<br>Maintains results"),
+    ("🤖", "AI Models", "2", ["Faster Whisper", "Sentence-BERT"]),
+    ("📚", "Topics", "6", [
+        "Machine Learning",
+        "Cloud Computing",
+        "Artificial Intelligence",
+        "Data Science",
+        "DBMS",
+        "Operating System",
+    ]),
+    ("📄", "Reports", "PDF", ["Transcript", "Scores", "AI Feedback", "Keyword Analysis"]),
+    ("💾", "Database", "SQLite", ["Stores analysis history", "Tracks reports", "Maintains results"]),
 ]
-for i in range(0, len(highlights), 2):
-    columns = st.columns(2)
-    for col, (icon, title, value, details) in zip(columns, highlights[i:i + 2]):
-        with col:
-            st.markdown(
-                f"""
-                <div class="highlight-card">
-                    <div class="highlight-icon">{icon}</div>
-                    <h3>{title}</h3>
-                    <div class="highlight-value">{value}</div>
-                    <p>{details}</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+
+highlights_html = "".join(
+    f"""
+    <div class="highlight-card">
+        <div class="highlight-top">
+            <span class="highlight-icon">{icon}</span>
+            <h3 class="highlight-title">{title}</h3>
+        </div>
+        <div class="highlight-value-badge">{val}</div>
+        <div class="highlight-items">
+            {"".join(f'<span class="highlight-chip">{item}</span>' for item in items)}
+        </div>
+    </div>
+    """
+    for icon, title, val, items in highlights
+)
+st.markdown(f'<div class="vbcua-grid vbcua-grid-4">{highlights_html}</div>', unsafe_allow_html=True)
 
 st.divider()
 
@@ -170,32 +172,45 @@ st.divider()
 # -------------------------------------------------------------------
 st.header("🌟 Why Choose VBCUA")
 choices = [
-    ("🎓", "For Students",
-     "✔ Improve conceptual understanding<br><br>"
-     "✔ Practice explaining concepts confidently<br><br>"
-     "✔ Receive instant AI-generated feedback<br><br>"
-     "✔ Identify missing concepts and keywords<br><br>"
-     "✔ Download professional PDF reports"),
-    ("👨‍🏫", "For Educators",
-     "✔ Evaluate conceptual understanding quickly<br><br>"
-     "✔ Save manual assessment time<br><br>"
-     "✔ Review AI-generated analysis reports<br><br>"
-     "✔ Track student performance efficiently<br><br>"
-     "✔ Maintain complete assessment history"),
+    (
+        "🎓",
+        "For Students",
+        [
+            "Improve conceptual understanding",
+            "Practice explaining concepts confidently",
+            "Receive instant AI-generated feedback",
+            "Identify missing concepts and keywords",
+            "Download professional PDF reports",
+        ],
+    ),
+    (
+        "👨‍🏫",
+        "For Educators",
+        [
+            "Evaluate conceptual understanding quickly",
+            "Save manual assessment time",
+            "Review AI-generated analysis reports",
+            "Track student performance efficiently",
+            "Maintain complete assessment history",
+        ],
+    ),
 ]
-columns = st.columns(2)
-for col, (icon, title, details) in zip(columns, choices):
-    with col:
-        st.markdown(
-            f"""
-            <div class="choose-card">
-                <div class="choose-icon">{icon}</div>
-                <h3>{title}</h3>
-                <p>{details}</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+
+choose_html = "".join(
+    f"""
+    <div class="choose-card">
+        <div class="choose-header">
+            <span class="choose-icon">{icon}</span>
+            <h3 class="choose-title">{title}</h3>
+        </div>
+        <div class="choose-list">
+            {"".join(f'<div class="choose-item">{point}</div>' for point in points)}
+        </div>
+    </div>
+    """
+    for icon, title, points in choices
+)
+st.markdown(f'<div class="vbcua-grid vbcua-grid-2">{choose_html}</div>', unsafe_allow_html=True)
 
 st.divider()
 
@@ -204,26 +219,26 @@ st.divider()
 # -------------------------------------------------------------------
 st.header("📚 Supported Topics")
 topics = [
-    ("🤖", "Artificial Intelligence",
-     "✔ Machine Learning<br><br>✔ Artificial Intelligence"),
-    ("☁️", "Computing",
-     "✔ Cloud Computing<br><br>✔ Operating System"),
-    ("💾", "Data Management",
-     "✔ Database Management System<br><br>✔ Data Science"),
+    ("🤖", "Artificial Intelligence", ["Machine Learning", "Artificial Intelligence"]),
+    ("☁️", "Computing", ["Cloud Computing", "Operating System"]),
+    ("💾", "Data Management", ["Database Management System", "Data Science"]),
 ]
-columns = st.columns(3)
-for col, (icon, title, details) in zip(columns, topics):
-    with col:
-        st.markdown(
-            f"""
-            <div class="topic-card">
-                <div class="topic-icon">{icon}</div>
-                <h3>{title}</h3>
-                <p>{details}</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+
+topics_html = "".join(
+    f"""
+    <div class="topic-card">
+        <div class="topic-header">
+            <span class="topic-icon">{icon}</span>
+            <h3 class="topic-title">{title}</h3>
+        </div>
+        <div class="topic-list">
+            {"".join(f'<div class="topic-pill">{item}</div>' for item in items)}
+        </div>
+    </div>
+    """
+    for icon, title, items in topics
+)
+st.markdown(f'<div class="vbcua-grid vbcua-grid-3">{topics_html}</div>', unsafe_allow_html=True)
 
 st.divider()
 
@@ -232,38 +247,50 @@ st.divider()
 # -------------------------------------------------------------------
 st.header("🚀 Future Enhancements")
 future = [
-    ("🎤", "Advanced AI Features",
-     "✔ Live Voice Recording<br><br>"
-     "✔ Multi-language Speech Recognition<br><br>"
-     "✔ AI Conversation Practice<br><br>"
-     "✔ Voice Emotion Detection<br><br>"
-     "✔ Personalized Learning Suggestions"),
-    ("☁️", "Platform Enhancements",
-     "✔ Student Login & Authentication<br><br>"
-     "✔ Teacher Dashboard<br><br>"
-     "✔ Cloud Deployment<br><br>"
-     "✔ Progress Tracking<br><br>"
-     "✔ Mobile Responsive Application"),
+    (
+        "🎤",
+        "Advanced AI Features",
+        [
+            "Live Voice Recording",
+            "Multi-language Speech Recognition",
+            "AI Conversation Practice",
+            "Voice Emotion Detection",
+            "Personalized Learning Suggestions",
+        ],
+    ),
+    (
+        "☁️",
+        "Platform Enhancements",
+        [
+            "Student Login & Authentication",
+            "Teacher Dashboard",
+            "Cloud Deployment",
+            "Progress Tracking",
+            "Mobile Responsive Application",
+        ],
+    ),
 ]
-columns = st.columns(2)
-for col, (icon, title, details) in zip(columns, future):
-    with col:
-        st.markdown(
-            f"""
-            <div class="future-card">
-                <div class="future-icon">{icon}</div>
-                <h3>{title}</h3>
-                <p>{details}</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+
+future_html = "".join(
+    f"""
+    <div class="future-card">
+        <div class="future-header">
+            <span class="future-icon">{icon}</span>
+            <h3 class="future-title">{title}</h3>
+        </div>
+        <div class="future-list">
+            {"".join(f'<div class="future-item">{point}</div>' for point in points)}
+        </div>
+    </div>
+    """
+    for icon, title, points in future
+)
+st.markdown(f'<div class="vbcua-grid vbcua-grid-2">{future_html}</div>', unsafe_allow_html=True)
 
 st.divider()
 
 # -------------------------------------------------------------------
 # AI Processing Pipeline
-# Important: no separate arrow columns. This is a 3 x 2 card grid.
 # -------------------------------------------------------------------
 st.header("🧠 AI Processing Pipeline")
 pipeline = [
@@ -274,20 +301,21 @@ pipeline = [
     ("📊", "Scoring", "Keyword Matching & Audio Analysis"),
     ("📄", "Report", "Feedback & PDF Report"),
 ]
-for i in range(0, len(pipeline), 3):
-    columns = st.columns(3)
-    for col, (icon, title, description) in zip(columns, pipeline[i:i + 3]):
-        with col:
-            st.markdown(
-                f"""
-                <div class="pipeline-card">
-                    <div class="pipeline-icon">{icon}</div>
-                    <h4>{title}</h4>
-                    <p>{description}</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+
+pipeline_html = "".join(
+    f"""
+    <div class="pipeline-card">
+        <div class="pipeline-top">
+            <span class="pipeline-icon">{icon}</span>
+            <span class="pipeline-stage">Stage 0{i + 1}</span>
+        </div>
+        <h4 class="pipeline-title">{title}</h4>
+        <p class="pipeline-description">{desc}</p>
+    </div>
+    """
+    for i, (icon, title, desc) in enumerate(pipeline)
+)
+st.markdown(f'<div class="vbcua-grid vbcua-grid-pipeline">{pipeline_html}</div>', unsafe_allow_html=True)
 
 st.divider()
 
