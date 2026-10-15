@@ -1,27 +1,77 @@
-import streamlit as st
+import sqlite3
+
 import pandas as pd
+import streamlit as st
 
-from database.queries import get_all_reports
-
+from database.queries import delete_all_reports, get_all_reports
 from utils.helper import load_css
+
 
 load_css()
 
-st.set_page_config(
-    page_title="Reports",
-    page_icon="📄",
-    layout="wide"
-)
-
 st.title("📄 Analysis Reports")
-st.markdown("Browse, search, and export all previous concept understanding analyses.")
-
+st.caption("Browse, filter, export, and manage saved analysis history.")
 st.divider()
+
+if "confirm_history_reset" not in st.session_state:
+    st.session_state.confirm_history_reset = False
+
+if st.session_state.pop("history_reset_notice", None) is not None:
+    st.success("Report history was cleared successfully.")
 
 reports = get_all_reports()
 
-if not reports:
-    st.info("No reports available.")
+if st.session_state.confirm_history_reset:
+    with st.container(border=True, key="history-reset-confirmation"):
+        st.warning(
+            f"This permanently deletes all {len(reports)} saved analysis-history "
+            "records from the local database. It does not delete audio files, "
+            "generated PDF files, reference concepts, or other data."
+        )
+        confirm_column, cancel_column = st.columns(2)
+        with confirm_column:
+            confirm_delete = st.button(
+                "Confirm Delete",
+                type="primary",
+                width="stretch",
+                key="confirm-delete-history",
+            )
+        with cancel_column:
+            cancel_delete = st.button(
+                "Cancel",
+                width="stretch",
+                key="cancel-delete-history",
+            )
+
+        if cancel_delete:
+            st.session_state.confirm_history_reset = False
+            st.rerun()
+
+        if confirm_delete:
+            try:
+                deleted_count = delete_all_reports()
+            except sqlite3.Error as error:
+                st.error(f"Could not clear report history: {error}")
+            else:
+                st.session_state.confirm_history_reset = False
+                st.session_state.history_reset_notice = deleted_count
+                for key in (
+                    "report_topic_search",
+                    "report_level_filter",
+                    "report_sort_order",
+                ):
+                    st.session_state.pop(key, None)
+                st.rerun()
+else:
+    if reports and st.button(
+        "🗑️ Reset History",
+        width="content",
+        key="request-reset-history",
+    ):
+        st.session_state.confirm_history_reset = True
+        st.rerun()
+
+if st.session_state.confirm_history_reset:
     st.stop()
 
 df = pd.DataFrame(
@@ -36,78 +86,89 @@ df = pd.DataFrame(
         "Explanation Quality",
         "Level",
         "Feedback",
-        "Created At"
-    ]
+        "Created At",
+    ],
+)
+overall_scores = pd.to_numeric(df["Overall Score"], errors="coerce").dropna()
+
+total_column, average_column, best_column = st.columns(3)
+total_column.metric("📄 Total Reports", len(df))
+average_column.metric(
+    "⭐ Average Score",
+    f"{overall_scores.mean():.2f}%" if not overall_scores.empty else "—",
+)
+best_column.metric(
+    "🏆 Best Score",
+    f"{overall_scores.max():.2f}%" if not overall_scores.empty else "—",
 )
 
-# ------------------------------------------------
-# Summary Cards
-# ------------------------------------------------
-
-c1, c2, c3 = st.columns(3)
-
-c1.metric("📄 Total Reports", len(df))
-c2.metric("⭐ Average Score", f"{df['Overall Score'].mean():.2f}%")
-c3.metric("🏆 Best Score", f"{df['Overall Score'].max():.2f}%")
+if df.empty:
+    st.info("No reports yet. Upload an audio explanation to start a new analysis.")
+    if st.button(
+        "🎤 Analyze Audio",
+        type="primary",
+        width="content",
+        key="analyze-from-empty-reports",
+    ):
+        st.switch_page("pages/Analyze_Audio.py")
+    st.stop()
 
 st.divider()
 
-# ------------------------------------------------
-# Search
-# ------------------------------------------------
+search_column, level_column, sort_column = st.columns([2, 1, 1])
+with search_column:
+    search = st.text_input("🔍 Search Topic", key="report_topic_search")
 
-search = st.text_input("🔍 Search Topic")
+levels = ["All"] + sorted(df["Level"].dropna().unique().tolist())
+with level_column:
+    selected_level = st.selectbox(
+        "🎯 Understanding Level",
+        levels,
+        key="report_level_filter",
+    )
 
+with sort_column:
+    sort_option = st.selectbox(
+        "📅 Sort By",
+        [
+            "Newest First",
+            "Oldest First",
+            "Highest Score",
+            "Lowest Score",
+        ],
+        key="report_sort_order",
+    )
+
+filtered_df = df
 if search:
-    df = df[df["Topic"].str.contains(search, case=False)]
-
-# ------------------------------------------------
-# Filter
-# ------------------------------------------------
-
-levels = ["All"] + sorted(df["Level"].unique().tolist())
-
-selected_level = st.selectbox(
-    "🎯 Filter by Understanding Level",
-    levels
-)
+    filtered_df = filtered_df[
+        filtered_df["Topic"].fillna("").str.contains(
+            search,
+            case=False,
+            regex=False,
+        )
+    ]
 
 if selected_level != "All":
-    df = df[df["Level"] == selected_level]
+    filtered_df = filtered_df[filtered_df["Level"] == selected_level]
 
-# ------------------------------------------------
-# Sort
-# ------------------------------------------------
+sort_options = {
+    "Newest First": ("Created At", False),
+    "Oldest First": ("Created At", True),
+    "Highest Score": ("Overall Score", False),
+    "Lowest Score": ("Overall Score", True),
+}
+sort_column_name, ascending = sort_options[sort_option]
+filtered_df = filtered_df.sort_values(sort_column_name, ascending=ascending)
 
-sort_option = st.selectbox(
-    "📅 Sort By",
-    [
-        "Newest First",
-        "Oldest First",
-        "Highest Score",
-        "Lowest Score",
-    ]
-)
-
-if sort_option == "Newest First":
-    df = df.sort_values("Created At", ascending=False)
-
-elif sort_option == "Oldest First":
-    df = df.sort_values("Created At")
-
-elif sort_option == "Highest Score":
-    df = df.sort_values("Overall Score", ascending=False)
-
-else:
-    df = df.sort_values("Overall Score")
+st.caption(f"Showing {len(filtered_df)} of {len(df)} saved reports.")
+if filtered_df.empty:
+    st.info("No reports match these filters. Adjust the search or level filter.")
+    st.stop()
 
 st.divider()
 
-# ------------------------------------------------
-# Report Table
-# ------------------------------------------------
-
-display_df = df[
+display_df = filtered_df[
     [
         "Topic",
         "Similarity",
@@ -118,36 +179,25 @@ display_df = df[
         "Created At",
     ]
 ]
-
 st.dataframe(
     display_df,
-    use_container_width=True,
+    width="stretch",
     hide_index=True,
 )
 
-# ------------------------------------------------
-# Report Details
-# ------------------------------------------------
-
 st.divider()
-
 st.subheader("📋 Detailed Reports")
 
-for _, row in df.iterrows():
-
-    with st.expander(
-        f"{row['Topic']} | {row['Created At']}"
-    ):
-
+for _, row in filtered_df.iterrows():
+    with st.expander(f"{row['Topic']} | {row['Created At']}"):
         st.write("### 📝 Transcript")
         st.write(row["Transcript"])
 
         st.write("### 📊 Scores")
-
-        st.write(f"Similarity : {row['Similarity']:.2f}%")
-        st.write(f"Overall : {row['Overall Score']:.2f}%")
-        st.write(f"Concept Accuracy : {row['Concept Accuracy']:.2f}%")
-        st.write(f"Explanation Quality : {row['Explanation Quality']:.2f}%")
+        st.write(f"Similarity: {row['Similarity']:.2f}%")
+        st.write(f"Overall: {row['Overall Score']:.2f}%")
+        st.write(f"Concept Accuracy: {row['Concept Accuracy']:.2f}%")
+        st.write(f"Explanation Quality: {row['Explanation Quality']:.2f}%")
 
         st.write("### 🎯 Understanding Level")
         st.success(row["Level"])
@@ -155,18 +205,13 @@ for _, row in df.iterrows():
         st.write("### 💬 Feedback")
         st.write(row["Feedback"])
 
-# ------------------------------------------------
-# CSV Export
-# ------------------------------------------------
-
 st.divider()
 
-csv = df.to_csv(index=False).encode("utf-8")
-
+csv = filtered_df.to_csv(index=False).encode("utf-8")
 st.download_button(
     label="⬇ Export Reports as CSV",
     data=csv,
     file_name="analysis_reports.csv",
     mime="text/csv",
-    width="stretch"
+    width="stretch",
 )

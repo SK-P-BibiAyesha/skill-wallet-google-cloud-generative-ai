@@ -1,0 +1,13 @@
+.git
+.venv
+.venv-1
+__pycache__
+*.py[cod]
+.env
+.streamlit/secrets.toml
+database/database.db
+audio/uploads/*
+audio/processed/*
+audio/waveforms/*
+reports/*
+tests/*

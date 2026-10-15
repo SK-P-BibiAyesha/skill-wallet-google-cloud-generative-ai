@@ -67,3 +67,15 @@ def get_all_reports():
     conn.close()
 
     return rows
+
+
+def delete_all_reports():
+    """Delete only analysis-history rows in one transaction and return the row count."""
+    conn = get_connection()
+
+    try:
+        with conn:
+            cursor = conn.execute("DELETE FROM analysis_history")
+            return cursor.rowcount
+    finally:
+        conn.close()

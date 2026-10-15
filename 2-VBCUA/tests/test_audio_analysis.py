@@ -12,7 +12,7 @@ def test_audio_analysis():
     Test audio analysis function using a sample audio file.
     """
 
-    audio_path = "tests/sample_audio.ogg"
+    audio_path = Path(__file__).resolve().parent / "cloud.ogg"
 
     transcript = (
         "Cloud computing provides on demand access "

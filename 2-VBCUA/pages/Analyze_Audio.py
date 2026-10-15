@@ -1,6 +1,7 @@
 import os
+import hashlib
+import logging
 import tempfile
-import traceback
 
 import streamlit as st
 
@@ -16,29 +17,17 @@ from utils.visualization import generate_waveform
 from utils.pdf_generator import generate_pdf
 
 from database.queries import insert_analysis
+from utils.audio_validation import validate_audio_upload
 
 
-# ======================================================
-# Page Configuration
-# ======================================================
 from utils.helper import load_css
-
-st.set_page_config(
-    page_title="Analyze Audio",
-    page_icon="🎤",
-    layout="wide"
-)
 
 load_css()
 
-
+logger = logging.getLogger(__name__)
 
 st.title("🎤 Analyze Audio")
-
-st.markdown(
-    "<p style='font-size:20px;'>Upload your voice explanation and analyze your conceptual understanding.</p>",
-    unsafe_allow_html=True,
-)
+st.caption("Upload a voice explanation to compare it with the selected reference concept.")
 
 st.divider()
 
@@ -78,13 +67,39 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file is not None:
 
+    audio_bytes = uploaded_file.getvalue()
+    validation_error = validate_audio_upload(uploaded_file.name, audio_bytes)
+    if validation_error:
+        st.error(validation_error)
+        st.stop()
+
     st.success(f"Uploaded: {uploaded_file.name}")
+    st.caption(f"File size: {len(audio_bytes) / (1024 * 1024):.2f} MB")
 
     st.audio(uploaded_file)
 
     st.info(f"Selected Topic: **{topic}**")
 
-    if st.button("🚀 Analyze Audio", width="stretch"):
+    upload_fingerprint = hashlib.sha256(
+        topic.encode("utf-8") + b"\0" + audio_bytes
+    ).hexdigest()
+    previously_analyzed = (
+        st.session_state.get("last_analysis_fingerprint") == upload_fingerprint
+    )
+
+    if previously_analyzed:
+        st.info(
+            "This audio and topic have already been analyzed in this session. "
+            "View the saved result in Reports, or explicitly analyze it again."
+        )
+        if st.button(
+            "Analyze This Audio Again",
+            width="stretch",
+            key="reanalyze-same-upload",
+        ):
+            st.session_state.pop("last_analysis_fingerprint", None)
+            st.rerun()
+    elif st.button("🚀 Analyze Audio", width="stretch"):
 
         temp_audio_path = None
 
@@ -101,9 +116,7 @@ if uploaded_file is not None:
                     suffix=extension
                 ) as temp_audio:
 
-                    temp_audio.write(
-                        uploaded_file.read()
-                    )
+                    temp_audio.write(audio_bytes)
 
                     temp_audio_path = temp_audio.name
 
@@ -116,9 +129,7 @@ if uploaded_file is not None:
                     exist_ok=True
                 )
 
-                waveform_file = (
-                    f"audio/waveforms/{uploaded_file.name}.png"
-                )
+                waveform_file = f"audio/waveforms/{upload_fingerprint}.png"
 
                 generate_waveform(
                     temp_audio_path,
@@ -129,7 +140,7 @@ if uploaded_file is not None:
 
                 st.image(
                     waveform_file,
-                    use_container_width=True
+                    width="stretch"
                 )
 
                 # =====================================
@@ -376,7 +387,7 @@ if uploaded_file is not None:
 
                 st.divider()
 
-                st.subheader("🤖 AI Verdict")
+                st.subheader("📌 Result Summary")
 
                 if similarity >= 90:
 
@@ -425,25 +436,10 @@ if uploaded_file is not None:
 
                     st.error(feedback["level"])
 
-                st.subheader("💬 AI Feedback")
+                st.subheader("💬 Feedback")
 
                 st.write(
                     feedback["message"]
-                )
-
-                # =====================================
-                # Save Analysis
-                # =====================================
-
-                insert_analysis(
-                    topic=topic,
-                    transcript=transcript,
-                    similarity=similarity,
-                    overall=score["overall"],
-                    concept=score["concept"],
-                    quality=score["quality"],
-                    level=feedback["level"],
-                    feedback=feedback["message"],
                 )
 
                 # =====================================
@@ -471,6 +467,19 @@ if uploaded_file is not None:
                     feedback=feedback["message"],
                 )
 
+                # Save only after the report has been generated successfully.
+                insert_analysis(
+                    topic=topic,
+                    transcript=transcript,
+                    similarity=similarity,
+                    overall=score["overall"],
+                    concept=score["concept"],
+                    quality=score["quality"],
+                    level=feedback["level"],
+                    feedback=feedback["message"],
+                )
+                st.session_state["last_analysis_fingerprint"] = upload_fingerprint
+
                 # =====================================
                 # Download PDF
                 # =====================================
@@ -496,15 +505,9 @@ if uploaded_file is not None:
                     "✅ Analysis Completed Successfully!"
                 )
 
-        except Exception as e:
-
-            st.error(
-                f"❌ Error: {e}"
-            )
-
-            st.code(
-                traceback.format_exc()
-            )
+        except Exception as error:
+            logger.exception("Audio analysis failed.")
+            st.error(f"Audio analysis failed: {error}")
 
         finally:
 

@@ -2,7 +2,7 @@
 
 An AI-powered educational assessment platform that evaluates a student's conceptual understanding through spoken explanations instead of simple keyword matching.
 
-The system converts speech into text using **Faster Whisper**, compares the explanation with expert reference concepts using **Sentence-BERT**, analyzes conceptual understanding, generates intelligent feedback, stores results in a SQLite database, and creates downloadable PDF reports.
+The system converts speech into text using **Faster Whisper**, compares the explanation with expert reference concepts using **Sentence-BERT**, derives similarity-based scores and result-based feedback, stores results in a SQLite database, and creates downloadable PDF reports.
 
 ---
 
@@ -10,7 +10,7 @@ The system converts speech into text using **Faster Whisper**, compares the expl
 
 Voice-Based Concept Understanding Analyser (VBCUA) is designed to improve concept-based learning by evaluating the semantic meaning of a student's explanation rather than checking for exact words.
 
-Students upload an audio explanation of one of the supported topics. The system automatically performs speech transcription using Faster Whisper, semantic similarity using Sentence-BERT, keyword matching, scoring, AI feedback generation, dashboard visualization, and PDF report generation.
+Students upload an audio explanation of one of the supported topics. The system performs speech transcription using Faster Whisper, semantic similarity using Sentence-BERT, keyword matching, similarity-based scoring, rule-based feedback, dashboard visualization, and PDF report generation.
 
 ---
 
@@ -20,13 +20,17 @@ Students upload an audio explanation of one of the supported topics. The system 
 - 📝 Speech-to-Text using Faster Whisper
 - 🧠 Semantic Similarity using Sentence-BERT
 - 🔑 Keyword Matching
-- 📊 AI-Based Score Calculation
-- 💬 Intelligent Feedback Generation
+- 📊 Similarity-Based Score Calculation
+- 💬 Feedback Based on the Analysis Result
 - 📄 Downloadable PDF Reports
 - 📈 Dashboard Analytics
 - 💾 SQLite Database Storage
 - 🎨 Responsive Streamlit Interface
-- 🌙 Dark & Light Theme Support
+
+Audio uploads are limited to 200 MB and accepted as WAV, MP3, M4A, OGG, or
+WEBM. The app checks that the file signature matches its extension. Repeating
+the same audio/topic analysis is blocked within the current session, with an
+option to explicitly analyze it again.
 
 ---
 
@@ -66,7 +70,7 @@ Keyword Matching
 Score Calculation
       │
       ▼
-AI Feedback
+Result-Based Feedback
       │
       ▼
 Store Results
@@ -111,9 +115,8 @@ Dashboard Analytics
 # 📂 Project Structure
 
 ```text
-VBCUA/
+2-VBCUA/
 │
-├── api/
 ├── assets/
 │   ├── images/
 │   └── styles/
@@ -154,7 +157,7 @@ VBCUA/
 │
 ├── app.py
 ├── requirements.txt
-├── runtime.txt
+├── Dockerfile
 └── README.md
 ```
 
@@ -165,11 +168,11 @@ VBCUA/
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/VBCUA.git
+git clone https://github.com/SK-P-BibiAyesha/skill-wallet-google-cloud-generative-ai.git
 ```
 
 ```bash
-cd VBCUA
+cd skill-wallet-google-cloud-generative-ai/2-VBCUA
 ```
 
 ---
@@ -193,7 +196,7 @@ Activate:
 ## Install Dependencies
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 ---
@@ -217,6 +220,8 @@ tests/
 ├── test_whisper_model.py
 ├── test_semantic_model.py
 ├── test_keyword_match.py
+├── test_audio_validation.py
+├── test_history_reset.py
 └── test_database.py
 ```
 
@@ -242,6 +247,14 @@ python tests/test_keyword_match.py
 python tests/test_database.py
 ```
 
+The reset and upload validation tests use temporary, isolated data. Run them
+without touching the application's saved report history:
+
+```bash
+python tests/test_history_reset.py
+python tests/test_audio_validation.py
+```
+
 ---
 
 # 📊 Output
@@ -251,12 +264,69 @@ The application generates:
 - Speech Transcript
 - Semantic Similarity Score
 - Keyword Matching Score
-- Overall AI Score
-- Personalized Feedback
+- Similarity-Based Overall Score
+- Rule-Based Feedback
 - Dashboard Analytics
 - Downloadable PDF Report
 
 ---
+
+# 🐳 Docker Deployment
+
+The repository includes a CPU-based Docker image. Docker Engine must be installed
+and running. Model weights are downloaded on first use, so the first analysis
+requires outbound network access and may take longer than later analyses.
+
+Build and run from the `2-VBCUA` directory:
+
+```bash
+docker build -t vbcua:local .
+docker volume create vbcua-data
+docker volume create vbcua-reports
+docker volume create vbcua-model-cache
+docker run --rm -p 8501:8501 `
+  -v vbcua-data:/data `
+  -v vbcua-reports:/app/reports `
+  -v vbcua-model-cache:/home/vbcua/.cache/huggingface `
+  vbcua:local
+```
+
+Open <http://localhost:8501>.
+
+The `vbcua-data` volume persists the SQLite database across container
+replacements. The application uses `/data/database.db` in the image. For a
+local non-Docker install, it defaults to `database/database.db`; to select a
+persistent location, set `VBCUA_DATABASE_PATH` to an absolute database file path
+before starting Streamlit.
+The `vbcua-reports` volume preserves generated PDF files across container
+replacements.
+
+PowerShell example:
+
+```powershell
+$env:VBCUA_DATABASE_PATH = "D:\vbcua-data\database.db"
+python -m streamlit run app.py
+```
+
+Linux/macOS example:
+
+```bash
+export VBCUA_DATABASE_PATH=/var/lib/vbcua/database.db
+python -m streamlit run app.py
+```
+
+**Hosting limitations:** the current application uses one local SQLite
+database, has no user authentication, and Reset History clears the shared
+history for every user of that deployment. Do not expose it as a public
+multi-user service as-is. Streamlit Community Cloud does not provide durable
+local-file storage for this database; use a managed database and object storage
+with an application migration before deploying there. Do not run multiple
+application replicas against a shared SQLite file. Protect the database volume
+with backups and restrict access to the Docker host.
+
+Reset History permanently deletes every `analysis_history` row in the active
+database after an explicit confirmation. It does not remove generated PDFs,
+audio files, or reference concepts.
 
 # 🚀 Future Enhancements
 
