@@ -1,835 +1,408 @@
-from pathlib import Path
 import streamlit as st
-
-# ---------------------------------
-# Load CSS
-# ---------------------------------
-
-def load_css():
-    css_path = Path(__file__).parent.parent / "assets" / "styles" / "custom.css"
-
-    if css_path.exists():
-        with open(css_path, encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+from utils.helper import load_css
 
 load_css()
-
-# ---------------------------------
-# Page Configuration
-# ---------------------------------
-
-st.set_page_config(
-    page_title="Voice-Based Concept Understanding Analyser",
-    page_icon="🎤",
-    layout="wide"
-)
 
 # ---------------------------------
 # Hero Section
 # ---------------------------------
 
-st.title("🎤 Voice-Based Concept Understanding Analyser")
-
-st.caption("AI-Powered Educational Assessment Platform")
-
-st.markdown("---")
-
-st.markdown(
-    """
+st.markdown("""
 <div class="hero-card">
-    <h1>Welcome to VBCUA</h1>
-
-<p style="font-size:18px;">
-Voice-Based Concept Understanding Analyser (VBCUA) is an intelligent
-educational assessment system that evaluates a student's conceptual
-understanding through speech. It converts spoken explanations into text,
-compares them with expert reference concepts using Artificial Intelligence,
-and generates detailed feedback with downloadable PDF reports.
-</p>
-
+    <div class="hero-badge">
+        ✨ Next-Gen Educational AI • Voice Concept Intelligence
+    </div>
+    <h1>Master Technical Concepts Through Voice</h1>
+    <p>
+        The Voice-Based Concept Understanding Analyser (VBCUA) transforms spoken explanations
+        into deep semantic insights. Evaluate conceptual understanding with state-of-the-art
+        ASR transcription, NLP semantic vectors, and automated feedback.
+    </p>
+    <div class="hero-stats-row">
+        <div class="hero-stat-chip">🎙️ <span>Faster-Whisper</span> Speech ASR</div>
+        <div class="hero-stat-chip">🧠 <span>Sentence-BERT</span> Semantic Vectors</div>
+        <div class="hero-stat-chip">🔑 <span>Keyword & Coverage</span> Analysis</div>
+        <div class="hero-stat-chip">📄 <span>Instant PDF</span> Performance Reports</div>
+    </div>
 </div>
-""",
-    unsafe_allow_html=True,
-)
+""", unsafe_allow_html=True)
 
+# Quick Action Buttons
 col1, col2 = st.columns(2)
 
 with col1:
-
-    if st.button(
-        "🚀 Start Analysis",
-        use_container_width=True
-    ):
+    if st.button("🚀 Start Voice Analysis", use_container_width=True, type="primary"):
         st.switch_page("pages/Analyze_Audio.py")
 
 with col2:
-
-    if st.button(
-        "📊 Dashboard",
-        use_container_width=True
-    ):
+    if st.button("📊 Explore Analytics Dashboard", use_container_width=True):
         st.switch_page("pages/Dashboard.py")
 
-st.markdown("---")
-
-
-st.markdown("---")
+st.markdown("<hr>", unsafe_allow_html=True)
 
 # ---------------------------------
 # Key Features
 # ---------------------------------
 
-st.header("✨ Key Features")
+st.markdown("### ✨ Intelligent Assessment Features")
+st.caption("Comprehensive AI architecture designed for authentic conceptual evaluation")
 
 col1, col2 = st.columns(2)
 
 with col1:
-
-    st.markdown(
-        """
-<div class="feature-card">
-
-<div class="feature-icon">🎙️</div>
-
-<div class="feature-title">
-Speech-to-Text
-</div>
-
-<div class="feature-description">
-Convert spoken explanations into accurate text using Faster Whisper.
-</div>
-
-</div>
-""",
-        unsafe_allow_html=True,
-    )
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">🎙️</div>
+        <div class="feature-title">High-Accuracy Speech-to-Text</div>
+        <div class="feature-description">
+            Converts technical audio explanations into precise transcripts using Faster Whisper
+            optimized for diverse accents, technical jargon, and speaking cadences.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 with col2:
-
-    st.markdown(
-        """
-<div class="feature-card">
-
-<div class="feature-icon">🧠</div>
-
-<div class="feature-title">
-Semantic Similarity
-</div>
-
-<div class="feature-description">
-Compare student explanations with reference concepts using Sentence-BERT.
-</div>
-
-</div>
-""",
-        unsafe_allow_html=True,
-    )
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">Deep Semantic Matching</div>
+        <div class="feature-description">
+            Goes beyond surface word-matching. Uses Sentence-BERT embeddings to evaluate whether
+            the student truly understands the underlying concept and its principles.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 col3, col4 = st.columns(2)
 
 with col3:
-
-    st.markdown(
-        """
-<div class="feature-card">
-
-<div class="feature-icon">📊</div>
-
-<div class="feature-title">
-Performance Analysis
-</div>
-
-<div class="feature-description">
-Evaluate conceptual accuracy, explanation quality, keyword matching, and overall understanding.
-</div>
-
-</div>
-""",
-        unsafe_allow_html=True,
-    )
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Multi-Dimensional Scoring</div>
+        <div class="feature-description">
+            Quantifies concept accuracy, explanation depth, keyword presence, and speech metrics
+            (duration, words per minute, loudness, and silence ratio).
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 with col4:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">📑</div>
+        <div class="feature-title">Automated PDF Verification</div>
+        <div class="feature-description">
+            Instantly generates downloadable, structured PDF reports complete with score breakdowns,
+            personalized AI feedback, and learning recommendations.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.markdown(
-        """
-<div class="feature-card">
-
-<div class="feature-icon">📄</div>
-
-<div class="feature-title">
-PDF Reports
-</div>
-
-<div class="feature-description">
-Generate downloadable PDF reports containing scores, feedback, transcript, and analysis results.
-</div>
-
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-st.markdown("---")
-
+st.markdown("<hr>", unsafe_allow_html=True)
 
 # ---------------------------------
 # How It Works
 # ---------------------------------
 
-st.header("⚙️ How It Works")
+st.markdown("### ⚙️ How The Assessment Works")
+st.caption("Four simple steps from spoken explanation to verified assessment report")
 
 step1, step2, step3, step4 = st.columns(4)
 
 with step1:
-
     st.markdown("""
-<div class="workflow-card">
-
-<h2>1️⃣</h2>
-
-<h4>Upload Audio</h4>
-
-<p>
-Upload your recorded voice explanation to begin the AI-powered analysis.
-</p>
-
-</div>
-""", unsafe_allow_html=True)
+    <div class="workflow-card">
+        <div class="workflow-step-num">1</div>
+        <h4>Record & Upload</h4>
+        <p>Record your voice explaining a technical concept and upload in WAV, MP3, M4A, or OGG format.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 with step2:
-
     st.markdown("""
-<div class="workflow-card">
-
-<h2>2️⃣</h2>
-
-<h4>Speech Recognition</h4>
-
-<p>
-Faster Whisper converts the uploaded speech into accurate text.
-</p>
-
-</div>
-""", unsafe_allow_html=True)
+    <div class="workflow-card">
+        <div class="workflow-step-num">2</div>
+        <h4>Speech Transcription</h4>
+        <p>Faster Whisper extracts acoustic features and generates high-fidelity textual transcriptions.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 with step3:
-
     st.markdown("""
-<div class="workflow-card">
-
-<h2>3️⃣</h2>
-
-<h4>AI Analysis</h4>
-
-<p>
-Sentence-BERT compares the explanation with the reference concept and evaluates understanding.
-</p>
-
-</div>
-""", unsafe_allow_html=True)
+    <div class="workflow-card">
+        <div class="workflow-step-num">3</div>
+        <h4>Semantic AI Evaluation</h4>
+        <p>Sentence-BERT models compare explanation embeddings with verified expert reference knowledge.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 with step4:
-
     st.markdown("""
-<div class="workflow-card">
-
-<h2>4️⃣</h2>
-
-<h4>Results & Report</h4>
-
-<p>
-View scores, feedback, keyword matching and download the professional PDF report.
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-
-# ---------------------------------
-# Technologies Used
-# ---------------------------------
-
-st.header("🛠 Technologies Used")
-
-tech1, tech2, tech3 = st.columns(3)
-
-with tech1:
-
-    st.markdown("""
-<div class="tech-card">
-
-<div class="tech-icon">🐍</div>
-
-<h3>Programming</h3>
-
-<p>
-
-✔ Python<br>
-
-✔ Streamlit<br>
-
-✔ SQLite
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-with tech2:
-
-    st.markdown("""
-<div class="tech-card">
-
-<div class="tech-icon">🤖</div>
-
-<h3>Artificial Intelligence</h3>
-
-<p>
-
-✔ Faster Whisper<br>
-
-✔ Sentence-BERT<br>
-
-✔ Transformers
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-with tech3:
-
-    st.markdown("""
-<div class="tech-card">
-
-<div class="tech-icon">📚</div>
-
-<h3>Libraries</h3>
-
-<p>
-
-✔ Torch<br>
-
-✔ Librosa<br>
-
-✔ Plotly<br>
-
-✔ ReportLab<br>
-
-✔ Pandas
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-
-# ---------------------------------
-# Project Highlights
-# ---------------------------------
-
-st.header("📈 Project Highlights")
-
-c1, c2, c3, c4 = st.columns(4)
-
-with c1:
-
-    st.markdown("""
-<div class="highlight-card">
-
-<div class="highlight-icon">🤖</div>
-
-<h3>AI Models</h3>
-
-<div class="highlight-value">2</div>
-
-<p>
-
-Faster Whisper<br>
-
-Sentence-BERT
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-with c2:
-
-    st.markdown("""
-<div class="highlight-card">
-
-<div class="highlight-icon">📚</div>
-
-<h3>Topics</h3>
-
-<div class="highlight-value">6</div>
-
-<p>
-
-Machine Learning<br>
-
-Cloud Computing<br>
-
-Artificial Intelligence<br>
-
-Data Science<br>
-
-DBMS<br>
-
-Operating System
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-with c3:
-
-    st.markdown("""
-<div class="highlight-card">
-
-<div class="highlight-icon">📄</div>
-
-<h3>Reports</h3>
-
-<div class="highlight-value">PDF</div>
-
-<p>
-
-Transcript<br>
-
-Scores<br>
-
-AI Feedback<br>
-
-Keyword Analysis
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-with c4:
-
-    st.markdown("""
-<div class="highlight-card">
-
-<div class="highlight-icon">💾</div>
-
-<h3>Database</h3>
-
-<div class="highlight-value">SQLite</div>
-
-<p>
-
-Stores analysis history<br>
-
-Tracks reports<br>
-
-Maintains results
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-# ---------------------------------
-# Why Choose VBCUA
-# ---------------------------------
-
-st.header("🌟 Why Choose VBCUA")
-
-col1, col2 = st.columns(2)
-
-with col1:
-
-    st.markdown("""
-<div class="choose-card">
-
-<div class="choose-icon">🎓</div>
-
-<h3>For Students</h3>
-
-<p>
-
-✔ Improve conceptual understanding<br><br>
-
-✔ Practice explaining concepts confidently<br><br>
-
-✔ Receive instant AI-generated feedback<br><br>
-
-✔ Identify missing concepts and keywords<br><br>
-
-✔ Download professional PDF reports
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-with col2:
-
-    st.markdown("""
-<div class="choose-card">
-
-<div class="choose-icon">👨‍🏫</div>
-
-<h3>For Educators</h3>
-
-<p>
-
-✔ Evaluate conceptual understanding quickly<br><br>
-
-✔ Save manual assessment time<br><br>
-
-✔ Review AI-generated analysis reports<br><br>
-
-✔ Track student performance efficiently<br><br>
-
-✔ Maintain complete assessment history
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-
-
-# ---------------------------------
-# Supported Topics
-# ---------------------------------
-
-st.header("📚 Supported Topics")
-
-col1, col2, col3 = st.columns(3)
-
-with col1:
-
-    st.markdown("""
-<div class="topic-card">
-
-<div class="topic-icon">🤖</div>
-
-<h3>Artificial Intelligence</h3>
-
-<p>
-
-✔ Machine Learning<br><br>
-
-✔ Artificial Intelligence
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-with col2:
-
-    st.markdown("""
-<div class="topic-card">
-
-<div class="topic-icon">☁️</div>
-
-<h3>Computing</h3>
-
-<p>
-
-✔ Cloud Computing<br><br>
-
-✔ Operating System
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-with col3:
-
-    st.markdown("""
-<div class="topic-card">
-
-<div class="topic-icon">💾</div>
-
-<h3>Data Management</h3>
-
-<p>
-
-✔ Database Management System<br><br>
-
-✔ Data Science
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-
-# ---------------------------------
-# Future Enhancements
-# ---------------------------------
-
-st.header("🚀 Future Enhancements")
-
-col1, col2 = st.columns(2)
-
-with col1:
-
-    st.markdown("""
-<div class="future-card">
-
-<div class="future-icon">🎤</div>
-
-<h3>Advanced AI Features</h3>
-
-<p>
-
-✔ Live Voice Recording<br><br>
-
-✔ Multi-language Speech Recognition<br><br>
-
-✔ AI Conversation Practice<br><br>
-
-✔ Voice Emotion Detection<br><br>
-
-✔ Personalized Learning Suggestions
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-with col2:
-
-    st.markdown("""
-<div class="future-card">
-
-<div class="future-icon">☁️</div>
-
-<h3>Platform Enhancements</h3>
-
-<p>
-
-✔ Student Login & Authentication<br><br>
-
-✔ Teacher Dashboard<br><br>
-
-✔ Cloud Deployment<br><br>
-
-✔ Progress Tracking<br><br>
-
-✔ Mobile Responsive Application
-
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-
-
+    <div class="workflow-card">
+        <div class="workflow-step-num">4</div>
+        <h4>Instant Report & PDF</h4>
+        <p>Review comprehensive scores, keyword analysis, AI suggestions, and download the official PDF.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("<hr>", unsafe_allow_html=True)
 
 # ---------------------------------
 # AI Processing Pipeline
 # ---------------------------------
 
-st.header("🧠 AI Processing Pipeline")
+st.markdown("### 🧠 AI Processing Pipeline")
+st.caption("Real-time end-to-end evaluation dataflow")
 
-c1, a1, c2, a2, c3, a3, c4, a4, c5, a5, c6 = st.columns(
-    [2, 0.4, 2, 0.4, 2, 0.4, 2, 0.4, 2, 0.4, 2]
-)
+c1, a1, c2, a2, c3, a3, c4, a4, c5, a5, c6 = st.columns([2, 0.4, 2, 0.4, 2, 0.4, 2, 0.4, 2, 0.4, 2])
 
 with c1:
     st.markdown("""
-<div class="pipeline-card">
-
-<div class="pipeline-icon">🎤</div>
-
-<h4>Voice Input</h4>
-
-<p>
-Upload audio
-</p>
-
-</div>
-""", unsafe_allow_html=True)
+    <div class="pipeline-card">
+        <div class="pipeline-icon">🎤</div>
+        <h4>Voice Input</h4>
+        <p>User audio upload</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 with a1:
-    st.markdown("<h1 class='pipeline-arrow'>➜</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 class='pipeline-arrow'>➜</h3>", unsafe_allow_html=True)
 
 with c2:
     st.markdown("""
-<div class="pipeline-card">
-
-<div class="pipeline-icon">🎙️</div>
-
-<h4>Speech Recognition</h4>
-
-<p>
-Faster Whisper
-</p>
-
-</div>
-""", unsafe_allow_html=True)
+    <div class="pipeline-card">
+        <div class="pipeline-icon">🎙️</div>
+        <h4>ASR Engine</h4>
+        <p>Faster Whisper</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 with a2:
-    st.markdown("<h1 class='pipeline-arrow'>➜</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 class='pipeline-arrow'>➜</h3>", unsafe_allow_html=True)
 
 with c3:
     st.markdown("""
-<div class="pipeline-card">
-
-<div class="pipeline-icon">📝</div>
-
-<h4>Transcript</h4>
-
-<p>
-Speech converted
-to text
-</p>
-
-</div>
-""", unsafe_allow_html=True)
+    <div class="pipeline-card">
+        <div class="pipeline-icon">📝</div>
+        <h4>Transcript</h4>
+        <p>Cleaned speech text</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 with a3:
-    st.markdown("<h1 class='pipeline-arrow'>➜</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 class='pipeline-arrow'>➜</h3>", unsafe_allow_html=True)
 
 with c4:
     st.markdown("""
-<div class="pipeline-card">
-
-<div class="pipeline-icon">🧠</div>
-
-<h4>Semantic Analysis</h4>
-
-<p>
-Sentence-BERT
-</p>
-
-</div>
-""", unsafe_allow_html=True)
+    <div class="pipeline-card">
+        <div class="pipeline-icon">🧠</div>
+        <h4>Embeddings</h4>
+        <p>Sentence-BERT</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 with a4:
-    st.markdown("<h1 class='pipeline-arrow'>➜</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 class='pipeline-arrow'>➜</h3>", unsafe_allow_html=True)
 
 with c5:
     st.markdown("""
-<div class="pipeline-card">
-
-<div class="pipeline-icon">📊</div>
-
-<h4>Scoring</h4>
-
-<p>
-Keyword Matching
-&
-Audio Analysis
-</p>
-
-</div>
-""", unsafe_allow_html=True)
+    <div class="pipeline-card">
+        <div class="pipeline-icon">📊</div>
+        <h4>Scoring & NLP</h4>
+        <p>Keywords & Speech</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 with a5:
-    st.markdown("<h1 class='pipeline-arrow'>➜</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 class='pipeline-arrow'>➜</h3>", unsafe_allow_html=True)
 
 with c6:
     st.markdown("""
-<div class="pipeline-card">
+    <div class="pipeline-card">
+        <div class="pipeline-icon">📑</div>
+        <h4>PDF & Insights</h4>
+        <p>Verified Report</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-<div class="pipeline-icon">📄</div>
+st.markdown("<hr>", unsafe_allow_html=True)
 
-<h4>Report</h4>
+# ---------------------------------
+# Project Highlights
+# ---------------------------------
 
-<p>
-Feedback &
-PDF Report
-</p>
+st.markdown("### 📈 Core Architecture Highlights")
+st.caption("Key technical metrics and foundational capabilities")
 
-</div>
-""", unsafe_allow_html=True)
+c1, c2, c3, c4 = st.columns(4)
 
-st.markdown("---")
+with c1:
+    st.markdown("""
+    <div class="highlight-card">
+        <div class="highlight-icon">🤖</div>
+        <h3>AI Foundation</h3>
+        <div class="highlight-value">2 Models</div>
+        <p>Faster Whisper ASR<br>Sentence-BERT Embeddings</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with c2:
+    st.markdown("""
+    <div class="highlight-card">
+        <div class="highlight-icon">📚</div>
+        <h3>Preloaded Domains</h3>
+        <div class="highlight-value">6 Topics</div>
+        <p>ML, Cloud, AI, Data Science, DBMS & Operating Systems</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with c3:
+    st.markdown("""
+    <div class="highlight-card">
+        <div class="highlight-icon">⚡</div>
+        <h3>Analysis Speed</h3>
+        <div class="highlight-value">&lt; 3 Sec</div>
+        <p>Instant GPU/CPU inference with detailed acoustic metrics</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with c4:
+    st.markdown("""
+    <div class="highlight-card">
+        <div class="highlight-icon">💾</div>
+        <h3>Persistence</h3>
+        <div class="highlight-value">SQLite DB</div>
+        <p>Historical audit trails, analytics, and instant retrieval</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("<hr>", unsafe_allow_html=True)
+
+# ---------------------------------
+# Supported Topics
+# ---------------------------------
+
+st.markdown("### 📚 Supported Technical Topics")
+st.caption("Standardized expert reference knowledge bases")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("""
+    <div class="topic-card">
+        <div class="topic-icon">🤖</div>
+        <h3>Artificial Intelligence & ML</h3>
+        <p>
+            • <strong>Machine Learning:</strong> Supervised, unsupervised, reinforcement learning.<br>
+            • <strong>Artificial Intelligence:</strong> Neural nets, heuristics, autonomous reasoning.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div class="topic-card">
+        <div class="topic-icon">☁️</div>
+        <h3>Systems & Infrastructure</h3>
+        <p>
+            • <strong>Cloud Computing:</strong> IaaS, PaaS, SaaS, virtualization, scaling.<br>
+            • <strong>Operating Systems:</strong> Processes, memory management, scheduling.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    st.markdown("""
+    <div class="topic-card">
+        <div class="topic-icon">💾</div>
+        <h3>Data & Storage</h3>
+        <p>
+            • <strong>DBMS:</strong> Relational design, ACID properties, normalization.<br>
+            • <strong>Data Science:</strong> EDA, statistical inference, feature engineering.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("<hr>", unsafe_allow_html=True)
+
+# ---------------------------------
+# Why Choose VBCUA
+# ---------------------------------
+
+st.markdown("### 🌟 Value For Learners & Educators")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("""
+    <div class="choose-card">
+        <div class="choose-icon">🎓</div>
+        <h3>For Students & Job Seekers</h3>
+        <p>
+            ✔ Master technical interview explanations by practicing out loud.<br>
+            ✔ Get objective AI feedback on concept completeness & clarity.<br>
+            ✔ Discover missing critical technical keywords automatically.<br>
+            ✔ Build confidence and track your skill progression over time.<br>
+            ✔ Download verifiable PDF reports for your skill portfolio.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div class="choose-card">
+        <div class="choose-icon">👨‍🏫</div>
+        <h3>For Educators & Assessors</h3>
+        <p>
+            ✔ Automate oral viva examinations with zero grading fatigue.<br>
+            ✔ Evaluate semantic comprehension instead of rote memorization.<br>
+            ✔ View holistic cohort performance on the analytics dashboard.<br>
+            ✔ Maintain auditable, persistent evaluation records in SQLite.<br>
+            ✔ Export CSV datasets for academic and institutional research.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("<hr>", unsafe_allow_html=True)
 
 # ---------------------------------
 # Footer
 # ---------------------------------
 
-st.markdown("---")
-
 st.markdown("""
 <div class="footer">
-
-<h2>🎤 Voice-Based Concept Understanding Analyser</h2>
-
-<p class="footer-subtitle">
-AI-Powered Educational Assessment Platform
-</p>
-
-<div class="footer-grid">
-
-<div class="footer-box">
-
-<h4>🛠 Technologies</h4>
-
-<p>
-
-Python<br>
-Streamlit<br>
-Faster Whisper<br>
-Sentence-BERT<br>
-SQLite<br>
-Plotly
-
-</p>
-
-</div>
-
-<div class="footer-box">
-
-<h4>📚 Features</h4>
-
-<p>
-
-Speech-to-Text<br>
-Semantic Similarity<br>
-Keyword Matching<br>
-Audio Statistics<br>
-PDF Reports
-
-</p>
-
-</div>
-
-<div class="footer-box">
-
-<h4>🎯 Purpose</h4>
-
-<p>
-
-Evaluate conceptual understanding using Artificial Intelligence and generate instant performance feedback.
-
-</p>
-
-</div>
-
-</div>
-
-<hr>
-
-<p class="copyright">
-
-© 2026 Voice-Based Concept Understanding Analyser (VBCUA)<br>
-
-Developed using Python, Streamlit and Artificial Intelligence.
-
-</p>
-
+    <h2>SkillWallet • Voice-Based Concept Understanding Analyser</h2>
+    <p class="footer-subtitle">
+        AI-Powered Educational Assessment Platform & Conceptual Intelligence
+    </p>
+    <div class="footer-grid">
+        <div class="footer-box">
+            <h4>🛠 Technologies</h4>
+            <p>
+                Python 3.13 • Streamlit • Faster-Whisper ASR<br>
+                Sentence-BERT Embeddings • Librosa Acoustic NLP<br>
+                Plotly Analytics • ReportLab PDF Engine
+            </p>
+        </div>
+        <div class="footer-box">
+            <h4>⚡ Assessment Capabilities</h4>
+            <p>
+                Speech-to-Text Transcription • Semantic Vector Scoring<br>
+                Technical Keyword Coverage • Pacing & Audio Metrics<br>
+                Instant Downloadable PDF Reports
+            </p>
+        </div>
+        <div class="footer-box">
+            <h4>🎯 Mission</h4>
+            <p>
+                Bridging the gap between knowledge retention and expressive mastery
+                through conversational AI and deep learning.
+            </p>
+        </div>
+    </div>
+    <div class="copyright">
+        © 2026 SkillWallet AI • Major Project Assessment Engine • Built with Generative AI & Streamlit
+    </div>
 </div>
 """, unsafe_allow_html=True)
-
-

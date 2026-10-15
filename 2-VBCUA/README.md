@@ -305,3 +305,5 @@ See the LICENSE file for more details.
 <p align="center">
   <img src="assets/images/reports.png" alt="Reports" width="70%">
 </p>
+
+## Version 2
