@@ -3,8 +3,10 @@ __pycache__/
 *.py[cod]
 *.pyo
 
-# Virtual Environment
+
+# Virtual Environments
 .venv/
+.venv-1/
 venv/
 env/
 
@@ -22,9 +24,11 @@ Thumbs.db
 # Environment Variables
 .env
 
-# Database
-*.db-journal
+# Local database files
+*.db
+*.sqlite
 *.sqlite3
+*.db-journal
 
 # Audio uploads
 audio/uploads/*
