@@ -1,5 +1,8 @@
+import datetime
 import os
 import sqlite3
+from time import timezone
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 import streamlit as st
@@ -90,6 +93,26 @@ df = pd.DataFrame(
         "Created At",
     ],
 )
+
+
+# Display stored UTC timestamps in Indian Standard Time.
+india_timezone = ZoneInfo("Asia/Kolkata")
+
+
+def format_created_at(value):
+    if pd.isna(value):
+        return value
+
+    timestamp = datetime.fromisoformat(str(value))
+
+    # SQLite CURRENT_TIMESTAMP values are UTC and have no timezone suffix.
+    if timestamp.tzinfo is None:
+        timestamp = timestamp.replace(tzinfo=timezone.utc)
+
+    return timestamp.astimezone(india_timezone).strftime("%Y-%m-%d %H:%M:%S")
+
+
+df["Created At"] = df["Created At"].apply(format_created_at)
 overall_scores = pd.to_numeric(df["Overall Score"], errors="coerce").dropna()
 
 total_column, average_column, best_column = st.columns(3)
