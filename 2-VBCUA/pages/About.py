@@ -47,7 +47,7 @@ features_html = "".join(
     """
     for icon, title, description in features
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-4">{features_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-4">{features_html}</div>')
 
 st.divider()
 
@@ -75,7 +75,7 @@ tech_html = "".join(
     """
     for icon, title, items in technologies
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-3">{tech_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-3">{tech_html}</div>')
 
 st.divider()
 
@@ -107,7 +107,7 @@ workflow_html = "".join(
     """
     for number, title in workflow
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-workflow">{workflow_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-workflow">{workflow_html}</div>')
 
 st.divider()
 
@@ -138,7 +138,7 @@ future_html = "".join(
     """
     for icon, enhancement in future_scope
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-workflow">{future_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-workflow">{future_html}</div>')
 
 st.divider()
 st.info("Developed as an AI-based educational project using Machine Learning and Natural Language Processing.")

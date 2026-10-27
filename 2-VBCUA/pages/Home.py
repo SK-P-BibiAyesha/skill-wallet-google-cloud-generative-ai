@@ -69,7 +69,7 @@ features_html = "".join(
     """
     for icon, title, desc in features
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-4">{features_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-4">{features_html}</div>')
 
 st.divider()
 
@@ -98,7 +98,7 @@ workflow_html = "".join(
     """
     for number, title, desc in workflow
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-4">{workflow_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-4">{workflow_html}</div>')
 
 st.divider()
 
@@ -126,7 +126,7 @@ tech_html = "".join(
     """
     for icon, title, items in technologies
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-3">{tech_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-3">{tech_html}</div>')
 
 st.divider()
 
@@ -163,7 +163,7 @@ highlights_html = "".join(
     """
     for icon, title, val, items in highlights
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-4">{highlights_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-4">{highlights_html}</div>')
 
 st.divider()
 
@@ -210,7 +210,7 @@ choose_html = "".join(
     """
     for icon, title, points in choices
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-2">{choose_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-2">{choose_html}</div>')
 
 st.divider()
 
@@ -238,7 +238,7 @@ topics_html = "".join(
     """
     for icon, title, items in topics
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-3">{topics_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-3">{topics_html}</div>')
 
 st.divider()
 
@@ -285,7 +285,7 @@ future_html = "".join(
     """
     for icon, title, points in future
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-2">{future_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-2">{future_html}</div>')
 
 st.divider()
 
@@ -315,7 +315,7 @@ pipeline_html = "".join(
     """
     for i, (icon, title, desc) in enumerate(pipeline)
 )
-st.markdown(f'<div class="vbcua-grid vbcua-grid-pipeline">{pipeline_html}</div>', unsafe_allow_html=True)
+st.html(f'<div class="vbcua-grid vbcua-grid-pipeline">{pipeline_html}</div>')
 
 st.divider()
 
