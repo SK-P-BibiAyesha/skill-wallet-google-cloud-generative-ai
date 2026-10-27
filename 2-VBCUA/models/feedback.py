@@ -1,51 +1,53 @@
-def generate_feedback(similarity):
 
-    if similarity >= 85:
+def generate_feedback(similarity):
+    """Generate feedback using the same thresholds as scoring.py."""
+
+    similarity = max(0.0, min(100.0, float(similarity)))
+
+    if similarity >= 90:
         return {
             "level": "Excellent",
             "color": "success",
-            "message": """
-✅ Excellent conceptual understanding.
-
-• Covered the important ideas.
-• Meaning is very close to the reference.
-• Keep it up!
-"""
+            "message": (
+                "Excellent conceptual understanding.\n\n"
+                "- Your explanation closely matches the reference.\n"
+                "- Review any remaining gaps in technical detail.\n"
+                "- Continue practicing with examples."
+            ),
         }
 
-    elif similarity >= 70:
+    elif similarity >= 75:
         return {
             "level": "Good",
             "color": "info",
-            "message": """
-👍 Good explanation.
-
-• Most concepts are correct.
-• Add a few more technical details.
-"""
+            "message": (
+                "Good explanation.\n\n"
+                "- Most important concepts are covered.\n"
+                "- Add missing technical details and examples.\n"
+                "- Review the reference topic."
+            ),
         }
 
     elif similarity >= 50:
         return {
             "level": "Average",
             "color": "warning",
-            "message": """
-🙂 Average understanding.
-
-• Some concepts are correct.
-• Important details are missing.
-• Revise the topic once more.
-"""
+            "message": (
+                "Developing conceptual understanding.\n\n"
+                "- Some concepts align with the reference.\n"
+                "- Review important missing details.\n"
+                "- Practice explaining the topic again."
+            ),
         }
 
     else:
         return {
             "level": "Needs Improvement",
             "color": "error",
-            "message": """
-❌ Needs Improvement.
-
-• Review the topic.
-• Practice explaining again.
-"""
+            "message": (
+                "More practice is recommended.\n\n"
+                "- Review the reference topic carefully.\n"
+                "- Identify the main ideas.\n"
+                "- Try explaining the topic again."
+            ),
         }

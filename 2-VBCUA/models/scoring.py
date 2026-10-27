@@ -1,33 +1,29 @@
+
 def generate_score(similarity):
+    """Generate assessment scores from semantic similarity."""
+
+    similarity = max(0.0, min(100.0, float(similarity)))
 
     if similarity >= 90:
-        return {
-            "overall": similarity,
-            "concept": 95,
-            "quality": 92,
-            "level": "Excellent"
-        }
-
+        level = "Excellent"
+        concept = 95
+        quality = 92
     elif similarity >= 75:
-        return {
-            "overall": similarity,
-            "concept": 85,
-            "quality": 80,
-            "level": "Good"
-        }
-
+        level = "Good"
+        concept = 85
+        quality = 80
     elif similarity >= 50:
-        return {
-            "overall": similarity,
-            "concept": 65,
-            "quality": 60,
-            "level": "Average"
-        }
-
+        level = "Average"
+        concept = 65
+        quality = 60
     else:
-        return {
-            "overall": similarity,
-            "concept": 40,
-            "quality": 35,
-            "level": "Needs Improvement"
-        }
+        level = "Needs Improvement"
+        concept = 40
+        quality = 35
+
+    return {
+        "overall": round(similarity, 2),
+        "concept": concept,
+        "quality": quality,
+        "level": level,
+    }
