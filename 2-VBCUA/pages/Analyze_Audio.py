@@ -121,45 +121,51 @@ if uploaded_file is not None:
                     temp_audio_path = temp_audio.name
 
                 # =====================================
-                # Waveform
+                              # =====================================
+                # Speech To Text (run first)
                 # =====================================
 
-                os.makedirs(
-                    "audio/waveforms",
-                    exist_ok=True
-                )
+                st.info("Step 1/4: Transcribing speech...")
+                transcript = transcribe_audio(temp_audio_path)
 
-                waveform_file = f"audio/waveforms/{upload_fingerprint}.png"
-
-                generate_waveform(
-                    temp_audio_path,
-                    waveform_file
-                )
-
-                st.subheader("📈 Audio Waveform")
-
-                st.image(
-                    waveform_file,
-                    width="stretch"
-                )
-
-                # =====================================
-                # Speech To Text
-                # =====================================
-
-                transcript = transcribe_audio(
-                    temp_audio_path
-                )
-
-                if transcript.strip() == "":
-                    st.warning(
-                        "⚠ No speech detected."
-                    )
+                if not transcript.strip():
+                    st.warning("⚠ No speech detected in this audio file.")
                     st.stop()
 
-                st.success(
-                    "✅ Transcription Completed"
-                )
+                st.success("✅ Transcription completed")
+
+                # =====================================
+                # Waveform (optional visualization)
+                # =====================================
+
+                st.info("Step 2/4: Preparing waveform...")
+
+                try:
+                    os.makedirs("audio/waveforms", exist_ok=True)
+                    waveform_file = (
+                        f"audio/waveforms/{upload_fingerprint}.png"
+                    )
+
+                    generate_waveform(temp_audio_path, waveform_file)
+
+                    if (
+                        os.path.exists(waveform_file)
+                        and os.path.getsize(waveform_file) > 0
+                    ):
+                        st.subheader("📈 Audio Waveform")
+                        st.image(waveform_file, width="stretch")
+                    else:
+                        st.warning(
+                            "Waveform could not be generated; "
+                            "continuing with analysis."
+                        )
+
+                except Exception:
+                    logger.exception("Waveform generation failed.")
+                    st.warning(
+                        "Waveform visualization failed, "
+                        "but speech analysis will continue."
+                    )
 
                 # =====================================
                 # Audio Statistics
