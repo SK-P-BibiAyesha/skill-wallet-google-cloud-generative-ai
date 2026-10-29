@@ -76,7 +76,14 @@ if uploaded_file is not None:
     st.success(f"Uploaded: {uploaded_file.name}")
     st.caption(f"File size: {len(audio_bytes) / (1024 * 1024):.2f} MB")
 
-    st.audio(uploaded_file)
+    audio_format = uploaded_file.type or "audio/ogg"
+
+    st.write("**Upload diagnostics**")
+    st.write("Filename:", uploaded_file.name)
+    st.write("File type:", audio_format)
+    st.write("Bytes received:", len(audio_bytes))
+
+    st.audio(audio_bytes, format=audio_format)
 
     st.info(f"Selected Topic: **{topic}**")
 
