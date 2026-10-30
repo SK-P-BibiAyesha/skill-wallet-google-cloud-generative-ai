@@ -1,14 +1,14 @@
 import streamlit as st
 
-from database.database import create_table
-
-create_table()
-
 st.set_page_config(
     page_title="Voice-Based Concept Understanding Analyser",
     page_icon="🎤",
     layout="wide"
 )
+
+from database.database import create_table
+
+create_table()
 
 home = st.Page(
     "pages/Home.py",
