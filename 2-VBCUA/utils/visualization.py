@@ -1,33 +1,38 @@
+import os
 import librosa
 import librosa.display
 import matplotlib.pyplot as plt
-import os
 
 
 def generate_waveform(audio_path, output_path):
     """
-    Generate a waveform image from an audio file.
+    Generate and save a waveform image from an audio file.
     """
 
-    # Load audio
     y, sr = librosa.load(audio_path, sr=None)
 
-    # Create figure
-    plt.figure(figsize=(10, 3))
+    output_dir = os.path.dirname(output_path)
 
-    librosa.display.waveshow(
-        y,
-        sr=sr
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+
+    librosa.display.waveshow(y, sr=sr, ax=ax)
+
+    ax.set_title("Audio Waveform")
+    ax.set_xlabel("Time (seconds)")
+    ax.set_ylabel("Amplitude")
+
+    fig.tight_layout()
+
+    fig.savefig(
+        output_path,
+        format="png",
+        dpi=150,
+        bbox_inches="tight"
     )
 
-    plt.title("Audio Waveform")
-    plt.xlabel("Time (seconds)")
-    plt.ylabel("Amplitude")
+    plt.close(fig)
 
-    plt.tight_layout()
-
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-
-    plt.savefig(output_path)
-
-    plt.close()
+    return output_path

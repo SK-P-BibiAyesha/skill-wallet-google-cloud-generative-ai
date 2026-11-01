@@ -1,4 +1,5 @@
-import os
+
+from pathlib import Path
 
 REFERENCE_FILES = {
     "Machine Learning": "machine_learning.txt",
@@ -14,12 +15,19 @@ def load_reference(topic):
     filename = REFERENCE_FILES.get(topic)
 
     if filename is None:
-        return ""
+        raise ValueError(f"Unknown topic: {topic}")
 
-    filepath = os.path.join("reference_concepts", filename)
+    project_root = Path(__file__).resolve().parent.parent
+    filepath = project_root / "reference_concepts" / filename
 
-    if not os.path.exists(filepath):
-        return ""
+    if not filepath.is_file():
+        raise FileNotFoundError(
+            f"Reference file not found for {topic}: {filepath}"
+        )
 
-    with open(filepath, "r", encoding="utf-8") as file:
-        return file.read().strip()
+    content = filepath.read_text(encoding="utf-8").strip()
+
+    if not content:
+        raise ValueError(f"Reference file is empty: {filepath}")
+
+    return content

@@ -141,6 +141,7 @@ if uploaded_file is not None:
 
                 st.success("✅ Transcription completed")
 
+                
                 # =====================================
                 # Waveform (optional visualization)
                 # =====================================
@@ -149,29 +150,42 @@ if uploaded_file is not None:
 
                 try:
                     os.makedirs("audio/waveforms", exist_ok=True)
+
                     waveform_file = (
                         f"audio/waveforms/{upload_fingerprint}.png"
                     )
 
-                    generate_waveform(temp_audio_path, waveform_file)
+                    generate_waveform(
+                        temp_audio_path,
+                        waveform_file
+                    )
 
                     if (
                         os.path.exists(waveform_file)
                         and os.path.getsize(waveform_file) > 0
                     ):
                         st.subheader("📈 Audio Waveform")
-                        st.image(waveform_file, width="stretch")
+
+                        with open(waveform_file, "rb") as image_file:
+                            waveform_bytes = image_file.read()
+
+                        st.image(
+                            waveform_bytes,
+                            caption="Audio Waveform",
+                            use_container_width=True
+                        )
                     else:
                         st.warning(
-                            "Waveform could not be generated; "
-                            "continuing with analysis."
+                            "Waveform could not be generated. "
+                            "Continuing with analysis."
                         )
 
-                except Exception:
+                except Exception as waveform_error:
                     logger.exception("Waveform generation failed.")
+
                     st.warning(
-                        "Waveform visualization failed, "
-                        "but speech analysis will continue."
+                        f"Waveform visualization failed: {waveform_error}. "
+                        "Continuing with analysis."
                     )
 
                 # =====================================
