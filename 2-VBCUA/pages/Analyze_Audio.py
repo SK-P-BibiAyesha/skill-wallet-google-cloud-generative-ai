@@ -2,6 +2,7 @@ import os
 import hashlib
 import logging
 import tempfile
+import base64
 
 import streamlit as st
 
@@ -169,10 +170,19 @@ if uploaded_file is not None:
                         with open(waveform_file, "rb") as image_file:
                             waveform_bytes = image_file.read()
 
-                        st.image(
-                            waveform_bytes,
-                            caption="Audio Waveform",
-                            use_container_width=True
+                        waveform_base64 = base64.b64encode(waveform_bytes).decode("utf-8")
+
+                        st.markdown(
+                            f"""
+                            <div style="width: 100%; text-align: center;">
+                                <img
+                                    src="data:image/png;base64,{waveform_base64}"
+                                    alt="Audio Waveform"
+                                    style="width: 100%; max-width: 1000px; height: auto;"
+                                />
+                            </div>
+                            """,
+                            unsafe_allow_html=True
                         )
                     else:
                         st.warning(
